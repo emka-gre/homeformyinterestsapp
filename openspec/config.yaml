@@ -1,0 +1,55 @@
+schema: spec-driven
+
+context: |
+  Nook — "a home for my interests". A private, cross-platform (iOS/Android/web)
+  personal hobby log. One app with swappable modules the user enables from their
+  profile, instead of one app per hobby.
+
+  Tech stack: Expo (React Native) + Expo Router, TypeScript, Supabase
+  (Postgres + RLS + Auth + Storage + PostGIS), TanStack Query, Zod.
+
+  Core architecture: all modules log into one shared domain — Entry (a
+  timestamped event), Item (a reusable thing you own), Place, Media. Modules
+  contribute only a payload schema, capture UI, and renderers via a registered
+  manifest. Modules must never import each other; the shell must never branch on
+  a module id. Payloads are JSONB by default; a module gains its own tables only
+  when its analytics justify it.
+
+  Privacy: everything is private by default. Visibility lives on the core Entry
+  and is enforced by Postgres row-level security, never by module code.
+
+  Planned modules: Coffee (first), Sports (second — the real test of the
+  architecture), then Books, Art, Cooking. Personal project, possibly a product
+  later; motivation is the scarce resource, so scope stays small and the first
+  module ships genuinely usable.
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

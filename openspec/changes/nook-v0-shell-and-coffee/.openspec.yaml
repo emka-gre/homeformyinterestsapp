@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-08-11
+goal: Ship a private, cross-platform hobby log with a proven module
+  architecture, validated by the Coffee module
