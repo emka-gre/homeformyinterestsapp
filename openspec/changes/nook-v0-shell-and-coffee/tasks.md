@@ -39,16 +39,16 @@ Ordered by dependency. Groups 1–3 build the foundation, 4–5 the shell, 6–9
 - [x] 4.2 Build the registry: startup registration, lookup by module id and entry type
 - [x] 4.3 Implement Zod-schema-driven payload validation on entry create and edit
 - [ ] 4.4 Build a generic form renderer that produces a capture form from an entry type's Zod schema
-- [ ] 4.5 Implement enablement reads and writes against `user_modules`
+- [x] 4.5 Implement enablement reads and writes against `user_modules`
 - [x] 4.6 Ensure card and detail renderers resolve for any registered module regardless of enablement (design D3)
 
 ## 5. App shell
 
-- [ ] 5.1 Build the navigation shell with Timeline and Profile fixed, and module entries derived from the registry
-- [ ] 5.2 Build the capture button and its module-derived options menu
-- [ ] 5.3 Build routing that resolves module routes from manifests without naming any module
-- [ ] 5.4 Verify with a throwaway dummy module that registering it adds nav, capture, and routes with zero shell edits
-- [ ] 5.5 Delete the dummy module
+- [x] 5.1 Build the navigation shell with Timeline and Profile fixed, and module entries derived from the registry
+- [x] 5.2 Build the capture button and its module-derived options menu
+- [x] 5.3 Build routing that resolves module routes from manifests without naming any module
+- [x] 5.4 Verify with a throwaway dummy module that registering it adds nav, capture, and routes with zero shell edits
+- [x] 5.5 Delete the dummy module — the dummy lives only inside `src/shell/shell-is-module-agnostic.test.tsx`, so it never entered the app build and the check stays permanent rather than being done once by hand
 
 ## 6. Authentication and profile
 

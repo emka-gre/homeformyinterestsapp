@@ -35,8 +35,19 @@ export {
   type PlacePatch,
 } from '@/core/data/places';
 
+export {
+  listUserModules,
+  setModuleEnabled,
+  type UserModule,
+} from '@/core/data/user-modules';
+
 export { queryKeys } from '@/core/data/query-keys';
 
 export { useCreateEntry, useDeleteEntry, useEntries, useEntry, useUpdateEntry } from '@/core/data/use-entries';
 export { useCreateItem, useDeleteItem, useItem, useItems, useUpdateItem } from '@/core/data/use-items';
 export { usePlace, usePlaces } from '@/core/data/use-places';
+export {
+  useEnabledModules,
+  useSetModuleEnabled,
+  useUserModules,
+} from '@/core/data/use-user-modules';
