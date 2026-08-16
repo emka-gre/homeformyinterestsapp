@@ -121,6 +121,12 @@ module.exports = [
               message:
                 'Only src/core/data/ may import the backend client (design D10). Use a repository function or query hook from @/core/data instead.',
             },
+            {
+              name: '@/core/data',
+              importNames: ['getClient'],
+              message:
+                'getClient() is private to the repository layer (design D10). Use a repository function or query hook from @/core/data instead.',
+            },
           ],
           patterns: [
             {
