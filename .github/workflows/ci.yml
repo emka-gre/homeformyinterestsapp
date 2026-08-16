@@ -59,11 +59,18 @@ jobs:
       - name: Start local Supabase
         run: supabase start --exclude imgproxy,vector,logflare
 
+      # `supabase status -o env` quotes every value (KEY="value"), which is
+      # fine for `source`ing in a real shell but not for $GITHUB_ENV — Actions
+      # takes everything after `=` verbatim, quotes included, which breaks
+      # supabase-js's URL validation. Strip the quotes, and only export the
+      # two vars the test needs (no reason to leak SERVICE_ROLE_KEY etc.).
       - name: Export local Supabase connection details
         run: |
           supabase status -o env \
             --override-name api.url=SUPABASE_URL \
             --override-name auth.anon_key=SUPABASE_ANON_KEY \
+            | grep -E '^(SUPABASE_URL|SUPABASE_ANON_KEY)=' \
+            | sed -E 's/="(.*)"$/=\1/' \
             >> "$GITHUB_ENV"
 
       # Task 2.12 — two real signed-in accounts; account B must get zero rows
