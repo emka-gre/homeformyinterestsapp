@@ -21,6 +21,7 @@ export interface QueryBuilderMock {
   order: jest.Mock;
   eq: jest.Mock;
   insert: jest.Mock;
+  upsert: jest.Mock;
   update: jest.Mock;
   delete: jest.Mock;
   single: jest.Mock;
@@ -38,6 +39,7 @@ export function createQueryBuilderMock(): QueryBuilderMock {
     order: jest.fn(() => builder),
     eq: jest.fn(() => builder),
     insert: jest.fn(() => builder),
+    upsert: jest.fn(() => builder),
     update: jest.fn(() => builder),
     delete: jest.fn(() => builder),
     single: jest.fn(() => Promise.resolve(result)),

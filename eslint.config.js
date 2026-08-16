@@ -25,6 +25,16 @@ module.exports = [
       // silently exempt from every policy below, which is the one failure mode
       // this rule cannot afford.
       'boundaries/elements': [
+        // The composition root, listed before `module` so it wins the match
+        // (elements are tried in order) rather than being classified as a
+        // module named "registration". Something has to import every module
+        // for its manifest to exist; this is that one place, and it is the
+        // only non-module code allowed to name one.
+        {
+          type: 'module-registration',
+          pattern: 'src/modules/registration/**',
+          partialMatch: false,
+        },
         {
           type: 'module',
           pattern: 'src/modules/*/**',
@@ -65,14 +75,27 @@ module.exports = [
                 },
               },
             },
-            // Route files are the shell's entry points.
+            // Route files are the shell's entry points. They may import the
+            // composition root to register modules at startup, but never a
+            // module directly.
             {
               from: { element: { type: 'route' } },
               allow: {
                 to: {
                   element: {
-                    types: { anyOf: ['route', 'shell', 'core', 'shared'] },
+                    types: {
+                      anyOf: ['route', 'shell', 'core', 'shared', 'module-registration'],
+                    },
                   },
+                },
+              },
+            },
+            // The composition root names modules; that is its whole purpose.
+            {
+              from: { element: { type: 'module-registration' } },
+              allow: {
+                to: {
+                  element: { types: { anyOf: ['module', 'core', 'shared'] } },
                 },
               },
             },

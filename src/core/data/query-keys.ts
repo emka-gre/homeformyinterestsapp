@@ -26,4 +26,8 @@ export const queryKeys = {
     list: () => ['places', 'list'] as const,
     detail: (id: string) => ['places', 'detail', id] as const,
   },
+  userModules: {
+    all: ['user-modules'] as const,
+    list: () => ['user-modules', 'list'] as const,
+  },
 };
