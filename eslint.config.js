@@ -104,4 +104,33 @@ module.exports = [
       ],
     },
   },
+  // Task 3.5 / design D10: no screen calls the backend client directly.
+  // Everything outside core/data/ must go through a repository function or
+  // query hook instead — that's the one place an offline queue can be added
+  // later without every call site changing.
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    ignores: ['src/core/data/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@supabase/supabase-js',
+              message:
+                'Only src/core/data/ may import the backend client (design D10). Use a repository function or query hook from @/core/data instead.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['**/core/data/client'],
+              message:
+                'getClient() is private to the repository layer (design D10). Use a repository function or query hook from @/core/data instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
