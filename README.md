@@ -14,17 +14,37 @@ rather than being five apps glued together.
 
 ## Status
 
-Early. The repository currently holds the Expo scaffold, the folder architecture,
-and the lint rules that enforce it. The v0 change — the module shell plus the
-Coffee module — is specified in `openspec/` but not yet implemented.
+Early. The Expo scaffold, the folder architecture and its lint rules, the full
+Supabase schema with row-level security, and the first pieces of the module
+registry are in place. The app shell, authentication, media, places, and the
+Coffee module itself are still to build — see
+[tasks.md](openspec/changes/nook-v0-shell-and-coffee/tasks.md) for the exact
+checklist and what's checked off.
 
 ## Stack
 
-- **Client** — Expo (React Native) + Expo Router, TypeScript, targeting iOS,
-  Android, and web from one codebase.
-- **Backend** — Supabase: Postgres with row-level security, Auth, Storage, and
-  PostGIS. Privacy is enforced at the database row level rather than
-  reimplemented in each module.
+- **Client** — [Expo](https://expo.dev) (React Native) + [Expo Router](https://docs.expo.dev/router/introduction/),
+  written in TypeScript, targeting iOS, Android, and web from one codebase.
+- **Backend** — [Supabase](https://supabase.com): Postgres with row-level
+  security, Auth, Storage, and PostGIS. Privacy is enforced at the database
+  row level rather than reimplemented in each module. Schema changes are
+  plain SQL migrations checked into [supabase/migrations/](supabase/migrations/).
+- **Data & state** — [TanStack Query](https://tanstack.com/query) for
+  server-state caching and mutations, persisted to device storage via
+  `@tanstack/query-async-storage-persister` and
+  [AsyncStorage](https://github.com/react-native-async-storage/async-storage),
+  so cached entries survive a restart.
+- **Validation** — [Zod](https://zod.dev) schemas define each module's entry
+  and item payloads and validate them on capture and edit.
+- **Testing** — [Jest](https://jestjs.io) via `jest-expo`, with
+  [React Native Testing Library](https://callstack.github.io/react-native-testing-library/)
+  for component tests, and a database integration suite that re-proves the
+  RLS privacy guarantee against a real, ephemeral local Supabase instance on
+  every push. See [Testing](#testing) below.
+- **Linting** — ESLint (`eslint-config-expo`) plus
+  `eslint-plugin-boundaries`, which turns the `core` / `modules` / `shell`
+  import rules below into a check that fails CI ([.github/workflows/ci.yml](.github/workflows/ci.yml))
+  instead of a convention people forget.
 
 ## Getting started
 
@@ -67,6 +87,30 @@ to check them.
 
 Path aliases (`@/core/*`, `@/modules/*`, `@/shell/*`, `@/*`, `@/assets/*`) are
 defined in [tsconfig.json](tsconfig.json).
+
+## Testing
+
+Three layers, all run in [CI](.github/workflows/ci.yml) on every push and PR:
+
+| Layer | What it checks | Run locally with |
+| --- | --- | --- |
+| Lint | Import boundaries (`core`/`modules`/`shell`), general code quality | `npm run lint` |
+| Typecheck | The codebase compiles under `strict` TypeScript | `npm run typecheck` |
+| Unit tests | Pure logic — the module registry, Zod-schema-driven payload validation | `npm test` |
+| Integration tests | Row-level security actually isolates accounts — two real signed-in users, one writes, the other must be unable to read, update, or delete it by any path | `npm run test:integration` (needs `supabase start`) |
+
+`npm run verify` runs lint, typecheck, and unit tests together — the fast
+subset with no external dependencies, worth running before every commit.
+
+The integration suite ([tests/integration/rls-privacy.mjs](tests/integration/rls-privacy.mjs))
+needs a local Supabase instance (`supabase start`, which needs Docker —
+CI spins its own up on the runner, so this never touches the hosted project
+or requires Docker on your machine unless you want to run it locally too).
+It signs up two throwaway accounts, has one create a place/item/entry, and
+asserts the other gets zero rows back — via unfiltered select, direct-by-id
+fetch, update, and delete — while the owner's own access keeps working. New
+tables or policies should extend this file rather than only being checked by
+hand once.
 
 ## Specs
 

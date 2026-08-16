@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same branch/PR so pushes don't queue behind
+# stale ones.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, typecheck, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Import-boundary rules (module isolation, shell not naming a module)
+      # are enforced here, not just by convention (design D2).
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:coverage
+
+  db-integration:
+    name: Database + RLS privacy tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Applies every migration in supabase/migrations against a fresh local
+      # Postgres — this is what actually proves the migrations are correct
+      # and reproducible, not just that they were once run by hand.
+      - name: Start local Supabase
+        run: supabase start --exclude imgproxy,vector,logflare
+
+      # `supabase status -o env` quotes every value (KEY="value"), which is
+      # fine for `source`ing in a real shell but not for $GITHUB_ENV — Actions
+      # takes everything after `=` verbatim, quotes included, which breaks
+      # supabase-js's URL validation. Strip the quotes, and only export the
+      # two vars the test needs (no reason to leak SERVICE_ROLE_KEY etc.).
+      - name: Export local Supabase connection details
+        run: |
+          supabase status -o env \
+            --override-name api.url=SUPABASE_URL \
+            --override-name auth.anon_key=SUPABASE_ANON_KEY \
+            | grep -E '^(SUPABASE_URL|SUPABASE_ANON_KEY)=' \
+            | sed -E 's/="(.*)"$/=\1/' \
+            >> "$GITHUB_ENV"
+
+      # Task 2.12 — two real signed-in accounts; account B must get zero rows
+      # and zero access to account A's data by any path.
+      - name: RLS privacy test
+        run: npm run test:integration
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop
