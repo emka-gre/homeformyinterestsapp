@@ -27,7 +27,7 @@ Ordered by dependency. Groups 1–3 build the foundation, 4–5 the shell, 6–9
 
 ## 3. Core data layer
 
-- [ ] 3.1 Define TypeScript types for Entry, Item, Place, Media generated from the schema
+- [x] 3.1 Define TypeScript types for Entry, Item, Place, Media generated from the schema
 - [ ] 3.2 Build the repository layer — the only code that talks to the backend client; all mutations async and failure-tolerant (design D10)
 - [ ] 3.3 Add TanStack Query hooks for reading entries, items, and places
 - [ ] 3.4 Add mutation hooks for create, edit, and delete of entries and items, with optimistic updates
