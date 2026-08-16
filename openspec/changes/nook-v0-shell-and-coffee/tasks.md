@@ -12,18 +12,18 @@ Ordered by dependency. Groups 1–3 build the foundation, 4–5 the shell, 6–9
 
 ## 2. Backend schema and privacy
 
-- [ ] 2.1 Create the hosted Postgres project; check migration tooling into the repo so schema is reproducible
-- [ ] 2.2 Migration: `profiles` table keyed to the auth user
-- [ ] 2.3 Migration: `places` table with owner, name, and coordinates
-- [ ] 2.4 Migration: `items` table with owner, module id, item type, name, and JSONB payload
-- [ ] 2.5 Migration: `entries` table with owner, module id, entry type, `occurred_at`, `status` (`planned | in_progress | done`, default `done`), `visibility`, rating, notes, tags, nullable `item_id`, nullable `place_id`, and JSONB payload
-- [ ] 2.6 Migration: `media` table with owner, storage path, and polymorphic attachment to an entry or item
-- [ ] 2.7 Migration: `user_modules` table storing per-account module enablement
-- [ ] 2.8 Migration: `entry_links` table per design D6 — created now, unused in v0
-- [ ] 2.9 Enable RLS on every table in the same migration that creates it; write owner-only policies
-- [ ] 2.10 Write the `friends`-visibility policy branch in dormant form so the feed needs no policy rewrite later
-- [ ] 2.11 Configure a private storage bucket for media with access tied to the owning record
-- [ ] 2.12 Verify privacy with a two-account test: confirm account B receives zero rows and no media for every table owned by account A
+- [x] 2.1 Create the hosted Postgres project; check migration tooling into the repo so schema is reproducible
+- [x] 2.2 Migration: `profiles` table keyed to the auth user
+- [x] 2.3 Migration: `places` table with owner, name, and coordinates
+- [x] 2.4 Migration: `items` table with owner, module id, item type, name, and JSONB payload
+- [x] 2.5 Migration: `entries` table with owner, module id, entry type, `occurred_at`, `status` (`planned | in_progress | done`, default `done`), `visibility`, rating, notes, tags, nullable `item_id`, nullable `place_id`, and JSONB payload
+- [x] 2.6 Migration: `media` table with owner, storage path, and polymorphic attachment to an entry or item
+- [x] 2.7 Migration: `user_modules` table storing per-account module enablement
+- [x] 2.8 Migration: `entry_links` table per design D6 — created now, unused in v0
+- [x] 2.9 Enable RLS on every table in the same migration that creates it; write owner-only policies
+- [x] 2.10 Write the `friends`-visibility policy branch in dormant form so the feed needs no policy rewrite later
+- [x] 2.11 Configure a private storage bucket for media with access tied to the owning record
+- [x] 2.12 Verify privacy with a two-account test: confirm account B receives zero rows and no media for every table owned by account A
 
 ## 3. Core data layer
 
