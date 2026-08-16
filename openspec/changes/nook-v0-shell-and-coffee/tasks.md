@@ -4,11 +4,11 @@ Ordered by dependency. Groups 1–3 build the foundation, 4–5 the shell, 6–9
 
 ## 1. Project setup
 
-- [ ] 1.1 Initialize an Expo + TypeScript app with Expo Router, running on iOS, Android, and web
+- [ ] 1.1 Initialize an Expo + TypeScript app with Expo Router, running on iOS, Android, and web — scaffolded and confirmed booting on web; iOS and Android not yet run
 - [x] 1.2 Configure path aliases and the folder structure: `core/`, `modules/`, `shell/`
 - [x] 1.3 Add an import-boundary lint rule forbidding imports between `modules/*` siblings, and forbidding `shell/` from importing any specific module (design D2)
 - [x] 1.4 Add Zod, TanStack Query, and the backend client; wire a query client with a persisted cache
-- [ ] 1.5 Verify a placeholder screen renders on all three platforms before going further
+- [ ] 1.5 Verify a placeholder screen renders on all three platforms before going further — web confirmed (the shell from group 5, not the original placeholder, which it replaced). iOS and Android still unverified; the native-only risks are safe-area insets, the capture `Modal`, and AsyncStorage-backed cache restore
 
 ## 2. Backend schema and privacy
 
