@@ -15,8 +15,8 @@ rather than being five apps glued together.
 ## Status
 
 Early. The Expo scaffold, the folder architecture and its lint rules, the full
-Supabase schema with row-level security, and the first pieces of the module
-registry are in place. The app shell, authentication, media, places, and the
+Supabase schema with row-level security, the module registry, the app shell,
+and passwordless sign-in with a profile are in place. Media, places, and the
 Coffee module itself are still to build — see
 [tasks.md](openspec/changes/nook-v0-shell-and-coffee/tasks.md) for the exact
 checklist and what's checked off.
@@ -61,6 +61,20 @@ npm run android
 npm run web
 npm run lint
 ```
+
+### Signing in
+
+Sign-in is passwordless: enter an email on the sign-in screen, open the link
+that arrives, and the app establishes a session that survives restarts.
+The link redirects back to the app's `/auth/callback` route, so that URL
+has to be on the auth server's redirect allow-list for each platform you
+run on — `nook://auth/callback` for a device build, `exp://…/--/auth/callback`
+for Expo Go, `http://localhost:8081/auth/callback` for web. The local
+instance is already configured in [supabase/config.toml](supabase/config.toml)
+(`additional_redirect_urls`); the hosted project needs the same list under
+*Authentication → URL Configuration*. Running against the local instance,
+emails land in the Inbucket UI that `supabase start` prints rather than in
+a real inbox.
 
 ## Architecture
 

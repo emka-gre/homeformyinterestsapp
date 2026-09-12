@@ -30,4 +30,9 @@ export const queryKeys = {
     all: ['user-modules'] as const,
     list: () => ['user-modules', 'list'] as const,
   },
+  profile: {
+    all: ['profile'] as const,
+    /** The signed-in user's own profile — there is only ever one, so no id in the key. */
+    me: () => ['profile', 'me'] as const,
+  },
 };

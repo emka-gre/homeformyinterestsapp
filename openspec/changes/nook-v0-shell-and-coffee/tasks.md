@@ -52,12 +52,12 @@ Ordered by dependency. Groups 1–3 build the foundation, 4–5 the shell, 6–9
 
 ## 6. Authentication and profile
 
-- [ ] 6.1 Implement email link sign-up and sign-in
-- [ ] 6.2 Implement session persistence across restarts, and restore-or-redirect on launch
-- [ ] 6.3 Implement sign-out, clearing cached entries and media from the device
-- [ ] 6.4 Auto-create a profile with a default display name on first sign-in
-- [ ] 6.5 Build the profile screen with display name editing
-- [ ] 6.6 Build the module toggle list on the profile screen
+- [x] 6.1 Implement email link sign-up and sign-in
+- [x] 6.2 Implement session persistence across restarts, and restore-or-redirect on launch
+- [x] 6.3 Implement sign-out, clearing cached entries and media from the device — clears the query cache and its persisted copy; media has no device cache yet (group 7), and must hook into `clearLocalCache` when it gets one
+- [x] 6.4 Auto-create a profile with a default display name on first sign-in — done by the `handle_new_user` trigger in the profiles migration, so no client code can forget it
+- [x] 6.5 Build the profile screen with display name editing
+- [x] 6.6 Build the module toggle list on the profile screen
 - [ ] 6.7 Verify enablement follows the account across two devices
 
 ## 7. Media
