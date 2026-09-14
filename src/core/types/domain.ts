@@ -67,3 +67,11 @@ export interface Media {
   itemId: string | null;
   createdAt: string;
 }
+
+/** Who the signed-in user is to themselves — and, once the feed exists, to friends. */
+export interface Profile {
+  id: string;
+  displayName: string;
+  createdAt: string;
+  updatedAt: string;
+}

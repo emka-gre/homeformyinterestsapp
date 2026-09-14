@@ -31,3 +31,14 @@ export const persistOptions = {
   persister,
   maxAge: CACHE_MAX_AGE,
 };
+
+/**
+ * Drops everything cached on this device — in memory and in the persisted
+ * copy — so that after sign-out, or once a stored session turns out to be
+ * dead, nothing of the previous account remains to be shown (task 6.3;
+ * user-account: "Sign out", "Session no longer valid").
+ */
+export async function clearLocalCache(): Promise<void> {
+  queryClient.clear();
+  await persister.removeClient();
+}

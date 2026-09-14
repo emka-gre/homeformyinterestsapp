@@ -10,6 +10,14 @@
 export const routes = {
   timeline: '/' as const,
   profile: '/profile' as const,
+  /** The only screen a signed-out user can reach. */
+  signIn: '/sign-in' as const,
+  /**
+   * Where an emailed sign-in link lands. Also the path passed to the backend
+   * as the link's redirect target, so it must stay in step with the file
+   * under src/app/ and with the backend's redirect allow-list.
+   */
+  authCallback: '/auth/callback' as const,
   /** A module's home screen. */
   module: (moduleId: string) => `/m/${moduleId}` as const,
   /** A screen a module declares in `manifest.routes`. */

@@ -35,7 +35,10 @@ export function getClient(): SupabaseClient {
       storage: Platform.OS === 'web' ? undefined : AsyncStorage,
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: Platform.OS === 'web',
+      // The callback route completes sign-in from the opened link on every
+      // platform (auth.ts completeSignIn), so the client must not race it by
+      // consuming the URL on web too.
+      detectSessionInUrl: false,
     },
   });
 
